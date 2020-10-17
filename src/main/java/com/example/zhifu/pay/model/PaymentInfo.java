@@ -29,7 +29,6 @@ public class PaymentInfo implements Serializable {
     @ApiModelProperty(value = "商户订单号")
     private Long id;
 
-    private Long commodity_id;
     @ApiModelProperty(value = "交易流水号")
     private String outTradeNo;
 

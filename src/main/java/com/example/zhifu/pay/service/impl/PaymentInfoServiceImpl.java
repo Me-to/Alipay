@@ -4,11 +4,13 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.zhifu.pay.model.PaymentInfo;
 import com.example.zhifu.pay.mapper.PaymentInfoMapper;
 import com.example.zhifu.pay.service.PaymentInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.zhifu.vo.PayAsyncVo;
+import com.example.zhifu.vo.PayVo;
 import org.springframework.stereotype.Service;
 
 /**
@@ -25,28 +27,37 @@ public class PaymentInfoServiceImpl extends ServiceImpl<PaymentInfoMapper, Payme
     @Override
     public String handlePayResult(PayAsyncVo vo) {
         int status = 0;
-
-        PaymentInfo paymentInfo = new PaymentInfo();
-        paymentInfo.setOutTradeNo(vo.getOut_trade_no());
-        paymentInfo.setPaymentType(1);
-        paymentInfo.setTradeNo(vo.getTrade_no());
-        paymentInfo.setTotalAmount(new BigDecimal(vo.getBuyer_pay_amount()));
-        paymentInfo.setSubject(vo.getSubject());
-        paymentInfo.setCreateTime(new Date());
-        paymentInfo.setCallbackTime(vo.getNotify_time());
-        paymentInfo.setCallbackContent("");
-        paymentInfo.setEffective(1);
+        QueryWrapper<PaymentInfo> queryWrapper = new QueryWrapper<PaymentInfo>()
+                .eq("out_trade_no", vo.getOut_trade_no());
+        PaymentInfo paymentInforesult = this.baseMapper.selectOne(queryWrapper);
+        paymentInforesult.setPaymentType(1);
+        paymentInforesult.setCallbackTime(vo.getNotify_time());
+        paymentInforesult.setCallbackContent("");
+        paymentInforesult.setEffective(1);
 
         if (vo.getTrade_status().equals("TRADE_SUCCESS") || vo.getTrade_status().equals("TRADE_FINISHED")) {
             status = 1;
-            paymentInfo.setPaymentStatus(status);
-            this.save(paymentInfo);
+            paymentInforesult.setPaymentStatus(status);
+            this.updateById(paymentInforesult);
             return "success";
-        }else {
-            paymentInfo.setPaymentStatus(status);
-            this.save(paymentInfo);
+        } else {
+            paymentInforesult.setPaymentStatus(status);
+            this.updateById(paymentInforesult);
             return "fail";
         }
 
+    }
+
+    @Override
+    public void oderPay(PayVo payVo) {
+        PaymentInfo paymentInfo = new PaymentInfo();
+        paymentInfo.setOutTradeNo(payVo.getOut_trade_no());
+        paymentInfo.setPaymentStatus(0);
+        paymentInfo.setSubject(payVo.getSubject());
+        paymentInfo.setTotalAmount(new BigDecimal(payVo.getTotal_amount()));
+        paymentInfo.setCreateTime(new Date());
+        paymentInfo.setEffective(1);
+        paymentInfo.setPaymentStatus(0);
+        this.baseMapper.insert(paymentInfo);
     }
 }

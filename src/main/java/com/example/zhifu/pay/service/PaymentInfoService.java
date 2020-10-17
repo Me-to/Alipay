@@ -3,6 +3,7 @@ package com.example.zhifu.pay.service;
 import com.example.zhifu.pay.model.PaymentInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.zhifu.vo.PayAsyncVo;
+import com.example.zhifu.vo.PayVo;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -16,4 +17,6 @@ import org.apache.ibatis.annotations.Param;
 public interface PaymentInfoService extends IService<PaymentInfo> {
 
     String handlePayResult(@Param("vo") PayAsyncVo vo);
+
+    void oderPay(PayVo payVo);
 }

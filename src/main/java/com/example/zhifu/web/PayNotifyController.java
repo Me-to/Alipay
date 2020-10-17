@@ -3,10 +3,13 @@ package com.example.zhifu.web;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.example.zhifu.config.AlipayTemplate;
+import com.example.zhifu.listener.CancelSender;
 import com.example.zhifu.pay.service.CommodityService;
 import com.example.zhifu.pay.service.PaymentInfoService;
 import com.example.zhifu.vo.PayAsyncVo;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,6 +33,7 @@ public class PayNotifyController {
     @Autowired
     PaymentInfoService paymentInfoService;
 
+    private static Logger LOGGER = LoggerFactory.getLogger(PayNotifyController.class);
     /**
      * 支付宝的异步回调
      *
@@ -55,11 +59,11 @@ public class PayNotifyController {
             params.put(name, valueStr);
         }
         if(AlipaySignature.rsaCheckV1(params, alipayTemplate.getAlipay_public_key(), alipayTemplate.getCharset(), alipayTemplate.getSign_type())){
-            System.out.println("验签成功");
+            LOGGER.info("pay_notify--验签成功");
             String result = paymentInfoService.handlePayResult(vo);
             return result;
         }else {
-            System.out.println("验签失败");
+            LOGGER.info("pay_notify--验签失败");
             return "fail";
         }
 

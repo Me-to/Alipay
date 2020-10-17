@@ -23,9 +23,9 @@ public class CancelSender {
     @Autowired
     private AmqpTemplate amqpTemplate;
 
-    public void sendMessage(String id, PayVo out_trade_no, final long delayTimes){
+    public void sendMessage(String out_trade_no, final long delayTimes){
         //给延迟队列发送消息
-        amqpTemplate.convertAndSend(QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getExchange(), QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getRouteKey(),id, new MessagePostProcessor() {
+        amqpTemplate.convertAndSend(QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getExchange(), QueueEnum.QUEUE_ORDER_PLUGIN_CANCEL.getRouteKey(),out_trade_no, new MessagePostProcessor() {
             @Override
             public Message postProcessMessage(Message message) throws AmqpException {
                 //给消息设置延迟毫秒值
@@ -33,6 +33,6 @@ public class CancelSender {
                 return message;
             }
         });
-        LOGGER.error("------这是消息队列发送者发送的消息");
+        LOGGER.info("sendMessage--延时队列创建消息成功");
     }
 }

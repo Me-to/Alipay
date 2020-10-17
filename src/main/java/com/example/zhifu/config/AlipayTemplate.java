@@ -12,6 +12,9 @@ import com.alipay.api.response.AlipayTradeCloseResponse;
 import com.example.zhifu.vo.PayVo;
 import lombok.Data;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +22,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Data
 public class AlipayTemplate {
-
+    private static Logger LOGGER = LoggerFactory.getLogger(AlipayTemplate.class);
         // 支付宝网关； https://openapi.alipaydev.com/gateway.do
     private String gatewayUrl;
     //在支付宝创建的应用的id
@@ -54,23 +57,23 @@ public class AlipayTemplate {
         String result = alipayClient.pageExecute(request).getBody();
 
         //会收到支付宝的响应，响应的是一个页面，只要浏览器显示这个页面，就会自动来到支付宝的收银台页面
-        System.out.println("支付宝的响应：" + result);
+        LOGGER.info("AlipayTemplate--支付宝收到消息");
         return result;
     }
 
-    public String closePay(PayVo payVo) throws AlipayApiException {
+    public String closePay(String out_trade_no) throws AlipayApiException {
         AlipayClient alipayClient = new DefaultAlipayClient(gatewayUrl, app_id, merchant_private_key, "json", "utf-8", alipay_public_key, "RSA2");
         AlipayTradeCloseRequest request=new AlipayTradeCloseRequest();
         AlipayTradeCloseModel model=new AlipayTradeCloseModel();
-        model.setOutTradeNo(payVo.getOut_trade_no());
+        model.setOutTradeNo(out_trade_no);
 //        model.setTradeNo(payVo.get);
         request.setBizModel(model);
         AlipayTradeCloseResponse response=alipayClient.execute(request);
         if (response.isSuccess()){
-            System.out.println("关闭订单成功");
+            LOGGER.info("closePay--关闭订单成功");
             return "success";
         }else {
-            System.out.println("关闭订单失败");
+            LOGGER.info("closePay--关闭订单失败");
             return "fail";
         }
 

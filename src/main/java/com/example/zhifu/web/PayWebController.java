@@ -1,31 +1,17 @@
 package com.example.zhifu.web;
 
 import com.alipay.api.AlipayApiException;
-import com.alipay.api.internal.util.AlipaySignature;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.zhifu.config.AlipayTemplate;
 import com.example.zhifu.listener.CancelSender;
-import com.example.zhifu.pay.mapper.CommodityMapper;
-import com.example.zhifu.pay.model.Order;
-import com.example.zhifu.pay.model.PaymentInfo;
 import com.example.zhifu.pay.service.CommodityService;
-import com.example.zhifu.pay.service.OrderService;
 import com.example.zhifu.pay.service.PaymentInfoService;
-import com.example.zhifu.vo.PayAsyncVo;
 import com.example.zhifu.vo.PayVo;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
-import java.util.*;
 
 @Slf4j
 @Controller
@@ -42,10 +28,8 @@ public class PayWebController {
 
     @Autowired
     CancelSender cancelSender;
+    
 
-    @Autowired
-    OrderService orderService;
-    Order order;
     @ResponseBody
     @GetMapping(value = "/payOrder", produces = "text/html")
     public String payOrder(@RequestParam("commodityid") String commodityid) throws AlipayApiException {
@@ -61,21 +45,16 @@ public class PayWebController {
         //填写订单信息和金额以及其他封装的必须内容
         PayVo payVo = commodityService.Configuration(commodityid);
         String pay = alipayTemplate.pay(payVo);
-        String replace = UUID.randomUUID().toString().replace("", "");
-        order.setPayType(1);
-        order.setId(Integer.valueOf(replace));
-        orderService.save(order);
-        sendDelayMessageCancelOrder(replace,payVo);
-
-//        sendDelayMessageCancelOrder();
+        paymentInfoService.oderPay(payVo);
+        sendDelayMessageCancelOrder(payVo.getOut_trade_no());
         return pay;
 
     }
-    private void sendDelayMessageCancelOrder(String id,PayVo payVo ) {
+    private void sendDelayMessageCancelOrder(String out_trade_no ) {
         //获取订单超时时间，假设为60分钟(测试用的30秒)
-        long delayTimes = 30 * 1000;
+        long delayTimes = 60 * 1000;
         //发送延迟消息
-        cancelSender.sendMessage(id,payVo, delayTimes);
+        cancelSender.sendMessage(out_trade_no, delayTimes);
     }
 
 
