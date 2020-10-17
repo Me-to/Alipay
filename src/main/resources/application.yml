@@ -1,0 +1,30 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: zhifu_pay
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/zhifu_pay?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+    username: root
+    password: zhangqian
+    type: com.alibaba.druid.pool.DruidDataSource
+mybatis-plus:
+  mapper-locations: classpath:/mapper/**/*.xml
+alipay:
+  app_id: 2016102800775171
+  gatewayUrl: https://openapi.alipaydev.com/gateway.do
+  merchant_private_key: MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCGwtbuIeHz/ML9dyzMFb9fQgJusVViE13K9sADgvFb3RZULopJi2/R0bUpz49EKoKi3hAenG95Z2X0TdB2921k6j3tq+NsBWEt0XxyapKIqK1sYSo8MWzeJ3lVOBsZKP19f1nq/9FTyRDvDjqzzu6ShNI3ODzTQOg8DG3wjQQIj+WrgcYioINhruGwBkC2w8DSu7sZJNpTwYfEsu3Iumukd0JKPhyXfeTbOaYLnRV5iOZ3ni9yCXGQ6KuXf9vYSerStk8WTgOgzietseVVN9qEvH66ILLqYhUsYBwhXI5o09YidMl+rlpqaJ+rNNYrTMl/ktxc79p9NpEVD+qwwyGDAgMBAAECggEADsF210xOeXDLyQUrmo0nDz8jFQvF1Z9ZPcgW7kuAMhbbQwx1h+gErmzP8WwQu94Lv9mg2jk224w+1alPkjc1ez9K2KNhm4pbQbEWd1DECsKtepiJD146FXktB+/Ex9R9LSisp9arDQmPGR3tv5KA/PoeKn2160vIIgsaXqSSNH2kD1M1tWjkcl+WfS6Pj2DtJCE/THwZUZWv0wN2b1ec/0Oluld6PaivC6ILkPe0PHKiMeMb8m+V3SvCPgjSmd710KN8whHPfyblGHWrZV5fcycaaY8t4TbMDuSi8QQ9KvBC+79mUGyerA3VflamhlWt1YvtzxFlbytu4+sZy4DbAQKBgQDVUzSNrNq6VsT0EEiHBQbA0yDMed2JFFOrQOm75liXx3sTJ+iLLpVG1Ll6FDJOHlC8Ux79tayfUbEawClR66RV9wtN2OqgCxfNLFw9IzEdkDzIsingkHkuV8U/SQJaYryM1OX1P9MYkNElzhsd3PjtwBgcjTRIKHsH70lvSDMu8wKBgQChuDh+ExNYw/3gCkyKG1E+musBignAEF/TpH06WJsJjsN/Zu3OTR71xfZaqfVLocCh2PaRJUMf/YSkwUDTdd3QzjU6sQZLSrXqpzGPQfIEiPTPaF8C2r3ne9JzDAnJUKvEKl6GDanqfqzTVD+BC/c9zx0FDkNCZmVqWRNVyTeHMQKBgAjBi4ytJaU0Xo0uBewU1rwfbl82OVOhE/YZif5+a/B+7ZxRrQfZd6MapCpQnef68pFoUANV66n2bnCMpqWIKIymwT4Gw0qiae2v/nE7+o4eF4CdX36qL28phx0b4A7ZsqeNLYstfXqqpwsINLC7GzSXB+ZUHWtAzhv7RGZe7krlAoGAeBxeAO1kCiKPFW4wyMZfQjNHZf5DHZ5LveJGjCYxCBk7hA1LhFTtMLdWMKJYqFK7wrlk8AqP31uov8E0x5mcJLBzAmNmfFdB48VH3tGo0ctyn/Ux0+no79ucQ4xmXFoJKQoa6E+PqrVo4RCKlerwN7zzHcUpGVD589GytZ1cG5ECgYEAiBRlP+ra+V2RP/5kI4m46OUi101UT6CHj8Ka9IXqwRPhHN9jpl0tyjPJe29nrtdjHLRBsy6cgYK54n6pGZ/9iGbe9eiUptCzq5h2H00p9I5lgtV/XTORu0B3GirIzKsMh0dBdbEE37rLPnqp+K/1fknfTrVLdELlRx36rZQ1oEU=
+  alipay_public_key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmSPQrSt7eNTW1lFpDPqJlABxQ5T46T7M8NBLjcFU+eFtLjKXFOJwPzb0nGIcW9iGNZzYzWyKx/wc5wOxVjIQA7dfb2w/lr9DYeruHtOO+PGWbiE3vmUKoaU8+bYNm0vmzIv5+QjcEHeiMLOTqa6T9jFW4q9Zhv76bwDB6qKXXpP3ffQtxgvo5tKcoArPHx713FyOEnCThpFpkEC/sVPJ+Quw4WdRl/K6fSgZwajFJuyBc5Fp58064FRn89bHfAyTb2sdLg230ewLfEEbBpz0l0lu5HoiCCsq1TCgfCdmsXraomaJ2anKyHoOKiXV1IF8w8r2htANJL5sh4W2cvvIxQIDAQAB
+  notify_url: http://qian1.vip.qydev.com/notify
+  return_url: http://qian1.vip.qydev.com/pay/ok
+  sign_type: RSA2
+  charset: utf-8
+  rabbitmq:
+    host: localhost # rabbitmq的连接地址
+    port: 5672 # rabbitmq的连接端口号
+    virtual-host: /mall # rabbitmq的虚拟host
+    username: qian # rabbitmq的用户名
+    password: qian # rabbitmq的密码
+    publisher-confirms: true #如果对异步消息需要回调必须设置为true
+
