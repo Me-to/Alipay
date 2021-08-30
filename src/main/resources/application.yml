@@ -13,11 +13,11 @@ mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml
 alipay:
   app_id: #######
-  gatewayUrl: https://openapi.alipaydev.com/gateway.do
+  gatewayUrl: https#://openapi.alipaydev.com/gateway.do
   merchant_private_key: ####
   alipay_public_key: ####
-  notify_url: http://qian1.vip.qydev.com/notify
-  return_url: http://qian1.vip.qydev.com/pay/ok
+  notify_url: http#://qian1.vip.qydev.com/notify
+  return_url: http#://qian1.vip.qydev.com/pay/ok
   sign_type: RSA2
   charset: utf-8
   rabbitmq:
